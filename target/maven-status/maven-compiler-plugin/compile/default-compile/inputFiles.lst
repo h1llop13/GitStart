@@ -1,0 +1,15 @@
+/Users/andrey/Desktop/GitStart/src/main/java/com/gitstart/Main.java
+/Users/andrey/Desktop/GitStart/src/main/java/com/gitstart/cli/ConsolePrompter.java
+/Users/andrey/Desktop/GitStart/src/main/java/com/gitstart/cli/GitStartCommand.java
+/Users/andrey/Desktop/GitStart/src/main/java/com/gitstart/environment/EnvironmentChecker.java
+/Users/andrey/Desktop/GitStart/src/main/java/com/gitstart/git/GitRepositoryState.java
+/Users/andrey/Desktop/GitStart/src/main/java/com/gitstart/git/GitService.java
+/Users/andrey/Desktop/GitStart/src/main/java/com/gitstart/github/GitHubService.java
+/Users/andrey/Desktop/GitStart/src/main/java/com/gitstart/github/RepositoryVisibility.java
+/Users/andrey/Desktop/GitStart/src/main/java/com/gitstart/project/ProjectDetector.java
+/Users/andrey/Desktop/GitStart/src/main/java/com/gitstart/project/ProjectInfo.java
+/Users/andrey/Desktop/GitStart/src/main/java/com/gitstart/project/ProjectType.java
+/Users/andrey/Desktop/GitStart/src/main/java/com/gitstart/project/ProjectTypeFormatter.java
+/Users/andrey/Desktop/GitStart/src/main/java/com/gitstart/shell/CommandExecutionException.java
+/Users/andrey/Desktop/GitStart/src/main/java/com/gitstart/shell/CommandExecutor.java
+/Users/andrey/Desktop/GitStart/src/main/java/com/gitstart/shell/CommandResult.java

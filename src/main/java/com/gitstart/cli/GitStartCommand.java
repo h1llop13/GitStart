@@ -3,13 +3,15 @@ package com.gitstart.cli;
 import com.gitstart.environment.EnvironmentChecker;
 import com.gitstart.git.GitRepositoryState;
 import com.gitstart.git.GitService;
+import com.gitstart.gitignore.GitignoreResult;
+import com.gitstart.gitignore.GitignoreService;
+import com.gitstart.github.GitHubService;
+import com.gitstart.github.RepositoryVisibility;
 import com.gitstart.project.ProjectDetector;
 import com.gitstart.project.ProjectInfo;
 import com.gitstart.project.ProjectTypeFormatter;
 import com.gitstart.shell.CommandExecutor;
 import picocli.CommandLine.Command;
-import com.gitstart.github.GitHubService;
-import com.gitstart.github.RepositoryVisibility;
 
 import java.nio.file.Path;
 
@@ -118,6 +120,48 @@ public class GitStartCommand implements Runnable {
                 "Environment is ready."
         );
 
+        /*
+         * Prepare .gitignore before Git initialization
+         */
+        System.out.println();
+        System.out.println(
+                "Preparing project..."
+        );
+
+        GitignoreService gitignoreService =
+                new GitignoreService();
+
+        GitignoreResult gitignoreResult;
+
+        try {
+            gitignoreResult =
+                    gitignoreService.prepare(
+                            projectInfo.path(),
+                            projectInfo.type()
+                    );
+
+        } catch (RuntimeException e) {
+            System.err.println(
+                    "Failed to prepare .gitignore."
+            );
+
+            printError(
+                    e.getMessage()
+            );
+
+            return;
+        }
+
+        if (gitignoreResult.created()) {
+            System.out.println(
+                    "✓ .gitignore created"
+            );
+        } else if (gitignoreResult.alreadyExists()) {
+            System.out.println(
+                    "✓ Existing .gitignore detected"
+            );
+        }
+
         System.out.println();
 
         GitService gitService =
@@ -170,7 +214,10 @@ public class GitStartCommand implements Runnable {
                         "Failed to initialize Git repository."
                 );
 
-                printError(initResult.stderr());
+                printError(
+                        initResult.stdout()
+                );
+
                 return;
             }
 
@@ -216,7 +263,10 @@ public class GitStartCommand implements Runnable {
                         "Failed to stage files."
                 );
 
-                printError(addResult.stderr());
+                printError(
+                        addResult.stdout()
+                );
+
                 return;
             }
 
@@ -232,7 +282,7 @@ public class GitStartCommand implements Runnable {
                 );
 
                 printError(
-                        commitResult.stderr()
+                        commitResult.stdout()
                 );
 
                 return;
@@ -257,7 +307,7 @@ public class GitStartCommand implements Runnable {
             );
 
             printError(
-                    branchResult.stderr()
+                    branchResult.stdout()
             );
 
             return;
@@ -267,6 +317,10 @@ public class GitStartCommand implements Runnable {
                 "✓ Main branch configured"
         );
 
+        /*
+         * Re-read repository state
+         * after initialization
+         */
         GitRepositoryState updatedState =
                 gitService.getState(
                         projectInfo.path()
@@ -280,6 +334,9 @@ public class GitStartCommand implements Runnable {
             return;
         }
 
+        /*
+         * Ask repository visibility
+         */
         ConsolePrompter prompter =
                 new ConsolePrompter();
 
@@ -350,7 +407,9 @@ public class GitStartCommand implements Runnable {
         );
 
         System.out.println();
-        System.out.println("Done.");
+        System.out.println(
+                "Done."
+        );
     }
 
     private void printStatus(

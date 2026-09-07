@@ -84,9 +84,11 @@ function Get-JavaMajorVersion {
         return $null
     }
 
-    $output = & java -version 2>&1 | Select-Object -First 1
+    $output = cmd /c "java --version 2>&1"
 
-    if ($output -match '"(\d+)') {
+    $firstLine = $output | Select-Object -First 1
+
+    if ($firstLine -match '(\d+)') {
         return [int]$Matches[1]
     }
 

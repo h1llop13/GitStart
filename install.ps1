@@ -232,7 +232,9 @@ Write-Host ""
 Write-Host "  gitstart"
 Write-Host ""
 
-if (-not (& gh auth status *> $null)) {
+cmd /c "gh auth status >nul 2>&1"
+
+if ($LASTEXITCODE -ne 0) {
     Write-Host "GitHub CLI is not authenticated yet."
     Write-Host ""
     Write-Host "Run:"
